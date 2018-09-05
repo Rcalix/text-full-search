@@ -22,7 +22,7 @@ PORT = 8001
 # Database connection info
 DB_NAME = 'pgfts'
 DB_HOST = 'localhost'
-DB_USER = 'fts_user'
+DB_USER = 'test'
 
 DB = postgresql.open(host=DB_HOST, database=DB_NAME, user=DB_USER)
 

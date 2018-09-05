@@ -7,7 +7,7 @@ import postgresql
 
 DB_NAME = 'pgfts'
 DB_HOST = 'localhost' # Uses a local socket
-DB_USER = 'fts_user'
+DB_USER = 'test'
 
 DB = postgresql.open(host=DB_HOST, database=DB_NAME, user=DB_USER)
 
@@ -15,19 +15,23 @@ def load_db():
     """Add sample data to the database"""
 
     ins = DB.prepare("""
-        INSERT INTO fulltext_search (doc)
-        VALUES ($1)
+        INSERT INTO fulltext_search (doc, value)
+        VALUES ($1, $2)
     """)
-    ins('Sketching the trees')
-    ins('Found in schema.org')
-    ins('Sketched out in schema.org')
-    ins('Girl on a train')
+    ins('Sketching the trees', 15)
+    ins('Found in schema.org', 20)
+    ins('Sketched out in schema.org', 5)
+    ins('Girl on a train', 3)
+    ins('Sketching the Walden Theme', 9)
+    ins('Found in Uol', 4)
+    ins('Course title link', 3)
+    ins('Sketching the Uol Theme', 9)
 
 def init_db():
     """Initialize our database"""
     DB.execute("DROP TABLE IF EXISTS fulltext_search")
     DB.execute("""
-        CREATE TABLE fulltext_search (id SERIAL, doc TEXT, tsv TSVECTOR)
+        CREATE TABLE fulltext_search (id SERIAL, doc TEXT, value INT, tsv TSVECTOR)
     """)
     DB.execute("""
         CREATE TRIGGER tsvupdate BEFORE INSERT OR UPDATE ON fulltext_search
